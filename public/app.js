@@ -9,6 +9,7 @@ async function fetchEntries() {
   const res = await fetch("/api/entries");
   entries = await res.json();
   render();
+  fetchAnalytics();
 }
 
 // Render table + stats
@@ -82,6 +83,24 @@ form.addEventListener("submit", async function (e) {
   form.reset();
   fetchEntries();
 });
+
+async function fetchAnalytics() {
+  const res = await fetch("/api/analytics/monthly");
+  const data = await res.json();
+
+  if (!data.monthlyMiles) return;
+
+  const analyticsDiv = document.getElementById("analytics");
+
+  analyticsDiv.innerHTML = `
+    <h3>Monthly Summary</h3>
+    <p><strong>Miles Driven:</strong> ${data.monthlyMiles.toFixed(0)}</p>
+    <p><strong>Fuel Spend:</strong> $${data.monthlyCost.toFixed(2)}</p>
+    <p><strong>Avg MPG:</strong> ${data.monthlyMPG.toFixed(2)}</p>
+    <p><strong>YTD Fuel Spend:</strong> $${data.ytdCost.toFixed(2)}</p>
+  `;
+}
+
 
 // Initial load
 fetchEntries();
