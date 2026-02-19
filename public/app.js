@@ -2,14 +2,23 @@ const form = document.getElementById("fuelForm");
 const table = document.getElementById("logTable");
 const statsDiv = document.getElementById("stats");
 
-let entries = JSON.parse(localStorage.getItem("fuelEntries")) || [];
+let entries = [];
 
-function saveEntries() {
-  localStorage.setItem("fuelEntries", JSON.stringify(entries));
+// Fetch entries from backend
+async function fetchEntries() {
+  const res = await fetch("/api/entries");
+  entries = await res.json();
+  render();
 }
 
+// Render table + stats
 function render() {
   table.innerHTML = "";
+
+  if (entries.length < 2) {
+    statsDiv.innerHTML = "<p>Add at least two fill-ups to calculate MPG.</p>";
+    return;
+  }
 
   let totalMiles = 0;
   let totalGallons = 0;
@@ -20,6 +29,8 @@ function render() {
     const current = entries[i];
 
     const miles = current.odometer - prev.odometer;
+    if (miles <= 0) continue;
+
     const mpg = miles / current.gallons;
     const costPerMile = current.cost / miles;
 
@@ -39,36 +50,38 @@ function render() {
     table.innerHTML += row;
   }
 
-  if (totalMiles > 0) {
-    const avgMPG = totalMiles / totalGallons;
-    const avgCostPerMile = totalCost / totalMiles;
+  const avgMPG = totalMiles / totalGallons;
+  const avgCostPerMile = totalCost / totalMiles;
 
-    statsDiv.innerHTML = `
-      <h3>Running Averages</h3>
-      <p>Average MPG: ${avgMPG.toFixed(2)}</p>
-      <p>Average Cost per Mile: $${avgCostPerMile.toFixed(3)}</p>
-    `;
-  }
+  statsDiv.innerHTML = `
+    <h3>Running Averages</h3>
+    <p><strong>Average MPG:</strong> ${avgMPG.toFixed(2)}</p>
+    <p><strong>Average Cost per Mile:</strong> $${avgCostPerMile.toFixed(3)}</p>
+  `;
 }
 
-form.addEventListener("submit", function (e) {
+// Submit new entry
+form.addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const odometer = Number(document.getElementById("odometer").value);
-  const gallons = Number(document.getElementById("gallons").value);
-  const cost = Number(document.getElementById("cost").value);
-
-  entries.push({
+  const entry = {
     date: new Date().toLocaleDateString(),
-    odometer,
-    gallons,
-    cost
+    odometer: Number(document.getElementById("odometer").value),
+    gallons: Number(document.getElementById("gallons").value),
+    cost: Number(document.getElementById("cost").value)
+  };
+
+  await fetch("/api/entries", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(entry)
   });
 
-  saveEntries();
-  render();
   form.reset();
+  fetchEntries();
 });
 
-render();
-
+// Initial load
+fetchEntries();
