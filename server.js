@@ -14,6 +14,10 @@ const pool = new Pool({
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(
+  "/vendor/bootstrap",
+  express.static(path.join(__dirname, "node_modules/bootstrap/dist"))
+);
 
 // Create table if not exists
 pool.query(`

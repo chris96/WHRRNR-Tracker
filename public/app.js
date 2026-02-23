@@ -18,7 +18,10 @@ function render() {
   table.innerHTML = "";
 
   if (entries.length < 2) {
-    statsDiv.innerHTML = "<p>Add at least two fill-ups to calculate MPG.</p>";
+    statsDiv.innerHTML = `
+      <h2 class="h5 fw-semibold mb-3">Running Averages</h2>
+      <p class="text-secondary mb-0">Add at least two fill-ups to calculate MPG.</p>
+    `;
     return;
   }
 
@@ -56,9 +59,17 @@ function render() {
   const avgCostPerMile = totalCost / totalMiles;
 
   statsDiv.innerHTML = `
-    <h3>Running Averages</h3>
-    <p><strong>Average MPG:</strong> ${avgMPG.toFixed(2)}</p>
-    <p><strong>Average Cost per Mile:</strong> $${avgCostPerMile.toFixed(3)}</p>
+    <h2 class="h5 fw-semibold mb-3">Running Averages</h2>
+    <div class="metric-list">
+      <div class="metric-item">
+        <span class="metric-label">Average MPG</span>
+        <span class="metric-value">${avgMPG.toFixed(2)}</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-label">Average Cost per Mile</span>
+        <span class="metric-value">$${avgCostPerMile.toFixed(3)}</span>
+      </div>
+    </div>
   `;
 }
 
@@ -90,16 +101,33 @@ async function fetchAnalytics() {
   const data = await res.json();
 
   if (!data.monthlyMiles) {
-    analyticsDiv.innerHTML = "<p>No monthly analytics yet.</p>";
+    analyticsDiv.innerHTML = `
+      <h2 class="h5 fw-semibold mb-3">Monthly Summary</h2>
+      <p class="text-secondary mb-0">No monthly analytics yet.</p>
+    `;
     return;
   }
 
   analyticsDiv.innerHTML = `
-    <h3>Monthly Summary</h3>
-    <p><strong>Miles Driven:</strong> ${data.monthlyMiles.toFixed(0)}</p>
-    <p><strong>Fuel Spend:</strong> $${data.monthlyCost.toFixed(2)}</p>
-    <p><strong>Avg MPG:</strong> ${data.monthlyMPG.toFixed(2)}</p>
-    <p><strong>YTD Fuel Spend:</strong> $${data.ytdCost.toFixed(2)}</p>
+    <h2 class="h5 fw-semibold mb-3">Monthly Summary</h2>
+    <div class="metric-list">
+      <div class="metric-item">
+        <span class="metric-label">Miles Driven</span>
+        <span class="metric-value">${data.monthlyMiles.toFixed(0)}</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-label">Fuel Spend</span>
+        <span class="metric-value">$${data.monthlyCost.toFixed(2)}</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-label">Avg MPG</span>
+        <span class="metric-value">${data.monthlyMPG.toFixed(2)}</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-label">YTD Fuel Spend</span>
+        <span class="metric-value">$${data.ytdCost.toFixed(2)}</span>
+      </div>
+    </div>
   `;
 }
 

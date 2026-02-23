@@ -1,34 +1,70 @@
+:root {
+  --tracker-bg-start: #f6fbff;
+  --tracker-bg-end: #eef2f8;
+  --tracker-surface: #ffffff;
+  --tracker-accent: #0d6efd;
+  --tracker-text: #0f172a;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  padding: 20px;
+  min-height: 100vh;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: var(--tracker-text);
+  background:
+    radial-gradient(circle at top right, rgba(13, 110, 253, 0.12), transparent 40%),
+    linear-gradient(145deg, var(--tracker-bg-start), var(--tracker-bg-end));
 }
 
-.container {
-  max-width: 800px;
-  margin: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
+.hero-shell {
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.82));
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(6px);
 }
 
-form input {
-  margin: 5px;
-  padding: 8px;
+.tracking-wide {
+  letter-spacing: 0.16em;
 }
 
-button {
-  padding: 8px 12px;
-  cursor: pointer;
+.stat-pill {
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: rgba(255, 255, 255, 0.9);
 }
 
-table {
-  width: 100%;
-  margin-top: 20px;
-  border-collapse: collapse;
+.card {
+  background: var(--tracker-surface);
 }
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.metric-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.metric-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 0.95rem;
+  border-radius: 0.8rem;
+  background: #f8fbff;
+  border: 1px solid #edf2f7;
+}
+
+.metric-label {
+  color: #475569;
+  font-weight: 500;
+}
+
+.metric-value {
+  font-weight: 700;
+}
+
+#logTable td,
+#logTable th {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .hero-shell {
+    text-align: left;
+  }
 }

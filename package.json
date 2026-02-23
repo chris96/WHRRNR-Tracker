@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/chris96/WHRRNR-Tracker#readme",
   "dependencies": {
+    "bootstrap": "^5.3.8",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "pg": "^8.18.0"
