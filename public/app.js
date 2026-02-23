@@ -1,6 +1,7 @@
 const form = document.getElementById("fuelForm");
 const table = document.getElementById("logTable");
 const statsDiv = document.getElementById("stats");
+const analyticsDiv = document.getElementById("analytics");
 
 let entries = [];
 
@@ -88,9 +89,10 @@ async function fetchAnalytics() {
   const res = await fetch("/api/analytics/monthly");
   const data = await res.json();
 
-  if (!data.monthlyMiles) return;
-
-  const analyticsDiv = document.getElementById("analytics");
+  if (!data.monthlyMiles) {
+    analyticsDiv.innerHTML = "<p>No monthly analytics yet.</p>";
+    return;
+  }
 
   analyticsDiv.innerHTML = `
     <h3>Monthly Summary</h3>
